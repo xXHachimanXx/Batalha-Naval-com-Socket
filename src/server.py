@@ -27,13 +27,13 @@ def createBoard():
                 # Testar se o espaço nao esta ocupado
                 columnOccupied = False
                 for x in range(shipSize):
-                    if not matrix[x+insertPositionX][insertPositionY] == -1:
+                    if not matrix[x + insertPositionX][insertPositionY] == -1:
                         columnOccupied = True
                         break
                 # Testar se o espaço nao esta ocupado
                 lineOccupied = False
                 for y in range(shipSize):
-                    if not matrix[insertPositionX][y+insertPositionY] == -1:
+                    if not matrix[insertPositionX][y + insertPositionY] == -1:
                         lineOccupied = True
                         break
                 
@@ -48,5 +48,5 @@ def createBoard():
                         for y in range(insertPositionY):
                             matrix[x][y] = ship
                     fits = True
-                                                                                     
+                    
     return matrix

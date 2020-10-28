@@ -46,15 +46,14 @@ def main():
     
     while not flagToExit:
         
-        print("\nEntre com um código: ")
-        print("Cadastrar um posto - D <tipo-combustível> <preço> <latitude> <longitude>")
-        print("Pesquisar um posto - P <tipo-combustível> <raio-de-busca> <latitude> <longitude>")
-        print("Sair da aplicação - E \n")
+        print("\nEntre com um código: " + \
+              "\nJogar - J <numero> <letra>" + \
+              "\nSair da aplicação - E")
         
         try:
             msg = input()
         except EOFError:
-            print(msg)            
+            print(msg)
         
         # testar se e' uma flag de saida
         if msg == "E":
@@ -62,15 +61,14 @@ def main():
             print('Obrigado e até logo :)')
             continue
         
-        msg = msg.encode('UTF-8')
-        #print((host, port))        
-        udpConnection.sendto(msg, (host, port))
+        elif msg == "J":
+            msg = msg.encode('UTF-8')
+            udpConnection.sendto(msg, (host, port))
         
-        udpConnection.settimeout(5.0)
-        msg, client = udpConnection.recvfrom(1024)
-        
-        if msg:
-            print(msg.decode('utf-8'))
-                    
+            # udpConnection.settimeout(5.0)
+            msg, client = udpConnection.recvfrom(1024)
+        else:
+            print("\nCódigo inválido")        
+
 
 main()
