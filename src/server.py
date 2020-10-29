@@ -7,17 +7,15 @@ serversocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 serverBoard = []
 
 def createBoard():
-    matrix = []
+    matrix = None
     
     # Inicializa matriz com -1
-    for x in range(SIZE_BOARD):
-        for y in range(SIZE_BOARD):
-            matrix[x][y] = -1
+    matrix = [[-1 for x in range(SIZE_BOARD)] for y in range(SIZE_BOARD)] 
     
     # Iterar para encaixar todos os navios    
-    for ship, shipSize in TYPES_OF_SHIPS:
+    for ship in TYPES_OF_SHIPS:
         fits = False
-        
+                
         # Enquanto nao couber o navio
         while not fits:
             
@@ -25,32 +23,30 @@ def createBoard():
             insertPositionY = randint(0, 9)
             
             # Testar se nao ultrapassa o tabuleiro
-            if insertPositionX + shipSize <= SIZE_BOARD and \
-               insertPositionY + shipSize <= SIZE_BOARD:
+            if insertPositionX + TYPES_OF_SHIPS[ship] <= SIZE_BOARD and \
+               insertPositionY + TYPES_OF_SHIPS[ship] <= SIZE_BOARD:
                    
                 # Testar se o espaço nao esta ocupado
                 columnOccupied = False
-                for x in range(shipSize):
+                for x in range(TYPES_OF_SHIPS[ship]):
                     if not matrix[x + insertPositionX][insertPositionY] == -1:
                         columnOccupied = True
                         break
                 # Testar se o espaço nao esta ocupado
                 lineOccupied = False
-                for y in range(shipSize):
+                for y in range(TYPES_OF_SHIPS[ship]):
                     if not matrix[insertPositionX][y + insertPositionY] == -1:
                         lineOccupied = True
                         break
                 
                 # Se couber, insira na matriz
                 if not lineOccupied:
-                    for x in range(insertPositionX):
-                        for y in range(insertPositionY):
-                            matrix[x][y] = ship
+                    for y in range(TYPES_OF_SHIPS[ship]):
+                        matrix[insertPositionX][y] = ship
                     fits = True
                 elif not columnOccupied:
-                    for x in range(insertPositionX):
-                        for y in range(insertPositionY):
-                            matrix[x][y] = ship
+                    for x in range(TYPES_OF_SHIPS[ship]):
+                        matrix[x][insertPositionY] = ship
                     fits = True
                     
     return matrix
@@ -114,7 +110,7 @@ def consoleWarning(msg, success, address):
         
     print(
         "Client: " + address[0] + ":" + str(address[1]) +
-        "\nMensagem: " + str(msg) +
+        "\nJogada: " + str(msg) +
         "\nStatus: " + successFlag + "\n"        
     )  
 
@@ -151,4 +147,5 @@ def main():
     # Fechar conexao
     serversocket.close()
 
-main()
+#createBoard()
+newMatrix = createBoard()
