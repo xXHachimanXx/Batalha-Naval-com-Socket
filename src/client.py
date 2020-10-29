@@ -31,6 +31,18 @@ def readClientData():
 
     return destiny
 
+def youWinOrLose(msg):
+    resp = False
+    
+    if msg == "Ganhou":
+        resp = True
+        print("Parabéns vocẽ ganhou :D")
+        
+    elif msg == "Perdeu":
+        resp = True
+        print("Que pena você perdeu (T_T)")
+    
+    return resp
 
 def main():
     global udpConnection
@@ -67,8 +79,14 @@ def main():
         
             # udpConnection.settimeout(5.0)
             msg, client = udpConnection.recvfrom(1024)
+            
+            # Se ganhou ou perdeu, saia do loop
+            if youWinOrLose(msg):
+                flagToExit = True                
         else:
-            print("\nCódigo inválido")        
+            print("\nCódigo inválido")
+        
+          
 
 
 main()

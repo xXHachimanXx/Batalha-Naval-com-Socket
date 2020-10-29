@@ -4,7 +4,7 @@ from random import randint
 from constants import *
 
 serversocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-serverBoard = []
+serverBoard = None
 
 def createBoard():
     matrix = None
@@ -135,7 +135,7 @@ def main():
                 print("Mensagem recebida!")
                 success = True
                 consoleWarning(msg, success, client)
-                # if shotStatus ? 
+                #
                 serversocket.sendto("Status tiro".encode('utf-8'), client)
         else:            
             consoleWarning(msg, success, client)
@@ -148,4 +148,4 @@ def main():
     serversocket.close()
 
 #createBoard()
-newMatrix = createBoard()
+main()
