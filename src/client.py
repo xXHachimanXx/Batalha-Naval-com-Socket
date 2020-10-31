@@ -21,11 +21,11 @@ def testIp(destiny):
 def readConnectionData():
 
     while True:
-        # destiny = input(
-        #     "Informe o ip e a porta da seguinte forma: <ip> <porta>\n"
-        # ).split(" ")
-        # DEBUG
-        destiny = ["localhost", 3333]
+        destiny = input(
+            "Informe o ip e a porta da seguinte forma: <ip> <porta>\n"
+        ).split(" ")
+        # # DEBUG
+        # destiny = ["localhost", 3333]
 
         if destiny[0] == "localhost":
             hostname = socket.gethostname()
@@ -124,8 +124,6 @@ def formatResponse(subject, response):
     global clientHitsCounter
 
     temp = response.split(" ")
-    print("teeeeeeeeeeemmm")
-    print(temp)
 
     if temp[0] == "Acertou":
         formatedResponse = "\n{}: \n{} o tiro \nTipo navio acertado: {} \nTiro do Server: {} {} \

@@ -189,17 +189,16 @@ def shot():
 
 def main():
     print("Bem-vindo à Batalha Naval com Socket!")
-    # port = int(
-    #     input("Digite a porta a ser escutada pelo servidor para inicializá-lo: ")
-    # )
+    port = int(
+        input("Digite a porta a ser escutada pelo servidor para inicializá-lo: ")
+    )
 
-    # DEBUG
-    port = 3333
+    # # DEBUG
+    # port = 3333
 
     initServer(port)
 
     global serverBoard
-    print(serverBoard)
 
     while True:
         global serversocket
