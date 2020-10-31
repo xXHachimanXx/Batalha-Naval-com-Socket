@@ -41,13 +41,17 @@ def readConnectionData():
 
 
 def youWinOrLose(msg):
+    global clientHitsCounter
+    
     resp = False
-
-    if msg == "Ganhou":
+    msg = msg.split(" ")
+    serverCounter = int(msg[2])
+    
+    if serverCounter == 0:
         resp = True
         print("Parabéns vocẽ ganhou :D")
 
-    elif msg == "Perdeu":
+    elif clientHitsCounter == 0:
         resp = True
         print("Que pena você perdeu (T_T)")
 
@@ -57,6 +61,27 @@ def youWinOrLose(msg):
 def countShot(msg):
     global clientBoard
     msg = msg.split()
+
+
+def formatServerResponse(response):
+    global clientHitsCounter
+
+    temp = response.split(" ")
+    print("teeeeeeeeeeemmm")
+    print(temp)
+
+    if temp[0] == "Acertou":
+        formatedResponse = "\n{} \nTipo navio acertado: {} \nTiro do Server: {} {} \
+            \nFaltam {} acertos".format(
+            temp[0], temp[1], temp[3], temp[4], temp[2]
+        )
+    else:
+        formatedResponse = "\n{} \nTiro do Server: {} {} \
+        \nFaltam {} acertos".format(
+            temp[0], temp[3], temp[4], temp[2]
+        )
+
+    return formatedResponse
 
 
 def main():
@@ -117,9 +142,12 @@ def main():
             msg, client = udpConnection.recvfrom(1024)
 
             countShot(msg)
-            print(msg.decode("utf-8"))
+
+            response = formatServerResponse(msg.decode("utf-8"))
+            print(response)
+
             # Se ganhou ou perdeu, saia do loop
-            if youWinOrLose(msg[0]):
+            if youWinOrLose(msg):
                 flagToExit = True
         else:
             print("\nCódigo inválido")

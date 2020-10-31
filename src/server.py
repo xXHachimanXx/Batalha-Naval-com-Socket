@@ -9,6 +9,7 @@ serverHitsCounter = 5 + 4 + 3 + 2
 
 serverShips = {"1": 5, "2": 4, "3": 3, "4": 2}
 
+
 def createBoard():
     matrix = None
 
@@ -139,15 +140,16 @@ def getBoardLine(boardLetter):
 
 def countShot(line, column):
     global serverHitsCounter
-    
+
     # tentar pegar posição de algum navio
     position = serverBoard[line][column]
-    
+
     if position == -1:
         response = "Errou -1"
     else:
         response = "Acertou " + str(serverBoard[line][column])
         serverBoard[line][column] = -1
+        serverHitsCounter = serverHitsCounter - 1
 
     return response
 
@@ -175,12 +177,12 @@ def validateShot(msg):
     else:
         response += "Errou -1"
 
-    return response
+    return response + " " + str(serverHitsCounter)
 
 def shot():
     line = randint(0, 9)
     column = randint(0, 9)
-    
+
     return chr(line + 97).upper() + " " + str(column)
 
 
@@ -194,7 +196,7 @@ def main():
     port = 3333
 
     initServer(port)
-    
+
     global serverBoard
     print(serverBoard)
 
@@ -214,8 +216,8 @@ def main():
                 success = True
                 consoleWarning(msg, success, client)
                 response = validateShot(msg)
-                response += " " + shot()
-                
+                response += " " + shot()                
+
                 serversocket.sendto(response.encode("utf-8"), client)
         else:
             consoleWarning(msg, success, client)
