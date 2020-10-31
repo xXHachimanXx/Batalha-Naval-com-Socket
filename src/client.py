@@ -62,7 +62,7 @@ def loadBoard():
     """
     global clientBoard
 
-    with open('./boards/client-board.txt', "r") as clientBoardFile:
+    with open('../boards/client-board.txt', "r") as clientBoardFile:
         clientBoard = [
             [int(num) for num in line.rstrip().split(' ')] for line in clientBoardFile
         ]
