@@ -9,6 +9,18 @@ clientHitsCounter = 5 + 4 + 3 + 2
 
 # Método para testar conexão
 def testIp(destiny):
+    """Testa conexão com o IP destino.
+
+    Parameters
+    ----------
+    destiny : list
+        Ip do destino
+
+    Returns
+    -------
+    boolean
+        Confirmação do teste.
+    """
     ip = destiny[0]
     # testar ip
 
@@ -17,9 +29,14 @@ def testIp(destiny):
     return ip != None
 
 
-# Ler dados do usuário
 def readConnectionData():
+    """Lê dados destino desejado pelo usuário.
 
+    Returns
+    -------
+    destiny : str
+        Destino da forma "<ip> <porta>".
+    """
     while True:
         destiny = input(
             "Informe o ip e a porta da seguinte forma: <ip> <porta>\n"
@@ -40,7 +57,9 @@ def readConnectionData():
     return destiny
 
 
-def createBoard():
+def loadBoard():
+    """Carregar tabuleiro do arquivo tx para a memória.
+    """
     global clientBoard
 
     with open('./boards/client-board.txt', "r") as clientBoardFile:
@@ -49,6 +68,18 @@ def createBoard():
         ]
 
 def youWinOrLose(msg):
+    """Testa se o player ganhou ou perdeu.
+
+    Parameters
+    ----------
+    msg : str
+        Status do client.
+
+    Returns
+    -------
+    resp : boolean
+        Confirmação do status.
+    """
     global clientHitsCounter
 
     resp = False
@@ -65,8 +96,19 @@ def youWinOrLose(msg):
 
     return resp
 
-
 def getBoardLine(boardLetter):
+    """Converte coordenada do tabuleiro de letra para inteiro.
+
+        Parameters
+        ----------
+        boardLetter : str
+            Letra do tabuleiro.
+
+        Returns
+        -------
+        boardLine : int
+            Número da linha do tabuleiro.
+        """
 
     boardLine = ord(boardLetter.lower()) - 97
 
@@ -78,6 +120,22 @@ def getBoardLine(boardLetter):
 
 
 def countShot(line, column):
+    """Contabiliza tiro.
+
+    Parameters
+    ----------
+    line : int
+        Linha do tabuleiro.
+        
+    column : int
+        Coluna do tabuleiro
+
+    Returns
+    -------
+    response : str
+        Resposta formatada do tiro contabilizado.
+    """
+    
     global clientHitsCounter
     global clientBoard
 
@@ -95,6 +153,18 @@ def countShot(line, column):
 
 
 def validateShot(msg):
+    """Valida tiro dado e retorna uma resposta formatada.
+
+    Parameters
+    ----------
+    msg : str
+        Mensagem do client.
+
+    Returns
+    -------
+    response : str
+        Resposta formatada.
+    """
 
     # Pegar linha e coluna do tabuleiro
     line = msg[3]  # linha
@@ -121,6 +191,22 @@ def validateShot(msg):
 
 
 def formatResponse(subject, response):
+    """Formata a resposta do server e do cliente para a exibição.
+
+    Parameters
+    ----------
+    subject : str
+        Identifica se é CLIENT ou SERVER.
+        
+    response : str
+        Resposta do servidor/client
+
+    Returns
+    -------
+    formatedResponse : str
+        Resposta formatada.
+    """
+    
     global clientHitsCounter
 
     temp = response.split(" ")
@@ -140,6 +226,8 @@ def formatResponse(subject, response):
 
 
 def main():
+    """Método principal
+    """
     global udpConnection
 
     # Receber dados para a conexao
@@ -154,7 +242,7 @@ def main():
     flagToExit = False
     
     # Inicializar tabuleiro
-    createBoard()
+    loadBoard()
 
     # Status iniciais
     statusFire = "Errou"
@@ -218,5 +306,5 @@ def main():
         else:
             print("\nCódigo inválido")
 
-
-main()
+if __name__ == "__main__":
+    main()

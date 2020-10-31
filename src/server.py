@@ -11,6 +11,14 @@ serverShips = {"1": 5, "2": 4, "3": 3, "4": 2}
 
 
 def createBoard():
+    """Método para inicializar o tabuleiro do server.
+
+    Returns
+    ----------
+    matrix : Matrix
+        Matriz do tabuleiro do servidor.
+    """
+    
     matrix = None
 
     # Inicializa matriz com -1
@@ -127,7 +135,19 @@ def consoleWarning(msg, success, address):
     )
 
 
-def getBoardLine(boardLetter):
+def getBoardLine(boardLetter):        
+    """Converte coordenada do tabuleiro de letra para inteiro.
+
+    Parameters
+    ----------
+    boardLetter : str
+        Letra do tabuleiro.
+
+    Returns
+    -------
+    boardLine : int
+        Número da linha do tabuleiro.
+    """
 
     boardLine = ord(boardLetter.lower()) - 97
 
@@ -139,6 +159,21 @@ def getBoardLine(boardLetter):
 
 
 def countShot(line, column):
+    """Contabiliza tiro.
+
+    Parameters
+    ----------
+    line : int
+        Linha do tabuleiro.
+    column : int
+        Coluna do tabuleiro
+
+    Returns
+    -------
+    response : str
+        Resposta formatada do tiro contabilizado.
+    """
+    
     global serverHitsCounter
     global serverBoard
 
@@ -156,6 +191,18 @@ def countShot(line, column):
 
 
 def validateShot(msg):
+    """Valida tiro dado e retorna uma resposta formatada.
+
+    Parameters
+    ----------
+    msg : str
+        Mensagem do client.
+
+    Returns
+    -------
+    response : str
+        Resposta formatada.
+    """
 
     # Pegar linha e coluna do tabuleiro
     line = msg[3]  # linha
@@ -180,14 +227,26 @@ def validateShot(msg):
 
     return response + " " + str(serverHitsCounter)
 
+
 def shot():
+    """Gerar coordenadas do tiro aleatóriamente.
+
+    Returns
+    -------
+    shotCoordinate : str
+        Coordenadas do tiro.
+    """
     line = randint(0, 9)
     column = randint(0, 9)
 
-    return chr(line + 97).upper() + " " + str(column)
+    shotCoordinate = chr(line + 97).upper() + " " + str(column)
+    
+    return shotCoordinate
 
 
 def main():
+    """Função principal.
+    """
     print("Bem-vindo à Batalha Naval com Socket!")
     port = int(
         input("Digite a porta a ser escutada pelo servidor para inicializá-lo: ")
@@ -216,7 +275,7 @@ def main():
                 success = True
                 consoleWarning(msg, success, client)
                 response = validateShot(msg)
-                response += " " + shot()                
+                response += " " + shot()
 
                 serversocket.sendto(response.encode("utf-8"), client)
         else:
@@ -229,5 +288,5 @@ def main():
     serversocket.close()
 
 
-# createBoard()
-main()
+if __name__ == "__main__":
+    main()
