@@ -40,13 +40,21 @@ def readConnectionData():
     return destiny
 
 
+def createBoard():
+    global clientBoard
+
+    with open('./boards/client-board.txt', "r") as clientBoardFile:
+        clientBoard = [
+            [int(num) for num in line.rstrip().split(' ')] for line in clientBoardFile
+        ]
+
 def youWinOrLose(msg):
     global clientHitsCounter
-    
+
     resp = False
     msg = msg.split(" ")
     serverCounter = int(msg[2])
-    
+
     if serverCounter == 0:
         resp = True
         print("Parabéns vocẽ ganhou :D")
@@ -58,12 +66,61 @@ def youWinOrLose(msg):
     return resp
 
 
-def countShot(msg):
+def getBoardLine(boardLetter):
+
+    boardLine = ord(boardLetter.lower()) - 97
+
+    # Testar se a posição não é válida
+    if not (boardLine >= 0 and boardLine <= 9):
+        boardLine = -1
+
+    return boardLine
+
+
+def countShot(line, column):
+    global clientHitsCounter
     global clientBoard
-    msg = msg.split()
+
+    # tentar pegar posição de algum navio
+    position = clientBoard[line][column]
+
+    if position == -1:
+        response = "Errou -1"
+    else:
+        response = "Acertou " + str(clientBoard[line][column])
+        clientBoard[line][column] = -1
+        clientHitsCounter = clientHitsCounter - 1
+
+    return response
 
 
-def formatServerResponse(response):
+def validateShot(msg):
+
+    # Pegar linha e coluna do tabuleiro
+    line = msg[3]  # linha
+    column = msg[4]  # coluna
+
+    response = ""
+
+    # Testar se linha é uma letra e se a coluna é um numero
+    if line.isalpha() and column.isnumeric():
+
+        # transformar letra em um índice
+        line = getBoardLine(line)
+        column = int(column)
+
+        # Validar indices linha e coluna
+        if line >= 0 and (column >= 0 and column <= 9):
+            response += countShot(line, column)
+        else:
+            response += "Errou -1"
+    else:
+        response += "Errou -1"
+
+    return response + " " + str(clientHitsCounter)
+
+
+def formatResponse(subject, response):
     global clientHitsCounter
 
     temp = response.split(" ")
@@ -71,14 +128,14 @@ def formatServerResponse(response):
     print(temp)
 
     if temp[0] == "Acertou":
-        formatedResponse = "\n{} \nTipo navio acertado: {} \nTiro do Server: {} {} \
+        formatedResponse = "\n{}: \n{} o tiro \nTipo navio acertado: {} \nTiro do Server: {} {} \
             \nFaltam {} acertos".format(
-            temp[0], temp[1], temp[3], temp[4], temp[2]
+            subject, temp[0], temp[1], temp[3], temp[4], temp[2]
         )
     else:
-        formatedResponse = "\n{} \nTiro do Server: {} {} \
+        formatedResponse = "\n{}: \n{} o tiro \nTiro do Server: {} {} \
         \nFaltam {} acertos".format(
-            temp[0], temp[3], temp[4], temp[2]
+            subject, temp[0], temp[3], temp[4], temp[2]
         )
 
     return formatedResponse
@@ -97,6 +154,9 @@ def main():
 
     # Flag caso o usuário queira sair do programa
     flagToExit = False
+    
+    # Inicializar tabuleiro
+    createBoard()
 
     # Status iniciais
     statusFire = "Errou"
@@ -141,14 +201,22 @@ def main():
             # Recuperar mensagem do servidor
             msg, client = udpConnection.recvfrom(1024)
 
-            countShot(msg)
+            msg = msg.decode("utf-8")
 
-            response = formatServerResponse(msg.decode("utf-8"))
+            # Formatar e mostrar status do tiro do CLIENT
+            response = formatResponse("CLIENT", msg)
             print(response)
 
             # Se ganhou ou perdeu, saia do loop
             if youWinOrLose(msg):
                 flagToExit = True
+                continue
+
+            # Formatar e mostrar status do tiro do SERVER
+            response = validateShot(msg.split(" "))
+            response = formatResponse("SERVER", msg)
+            print(response)
+
         else:
             print("\nCódigo inválido")
 

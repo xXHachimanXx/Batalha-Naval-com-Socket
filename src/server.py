@@ -140,6 +140,7 @@ def getBoardLine(boardLetter):
 
 def countShot(line, column):
     global serverHitsCounter
+    global serverBoard
 
     # tentar pegar posição de algum navio
     position = serverBoard[line][column]
