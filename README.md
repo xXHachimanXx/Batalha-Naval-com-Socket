@@ -9,3 +9,11 @@ O principal objetivo do projeto é praticar a programação com a biblioteca soc
 - No segundo terminal digite: `python client.py`
   - Obs.: Quando solicitada a porta, você deverá escolher a mesma porta do servidor.
 - Ambas as aplicações possuem instruções dos comandos utilizados.
+
+# Amostras de testes
+## Server
+![server-img](/assets/server.jpg)
+
+## Client
+![client-img](/assets/client.jpg)
+- Obs: As rodadas se repetem até que alguém vença. Neste caso, o programa irá parar.
