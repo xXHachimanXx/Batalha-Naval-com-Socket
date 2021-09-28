@@ -16,4 +16,4 @@ O principal objetivo do projeto é praticar a programação com a biblioteca soc
 
 ## Client
 ![client-img](/assets/client.jpg)
-- Obs: As rodadas se repetem até que alguém vença. Neste caso, o programa irá parar.
+- **Obs**: As rodadas se repetem até que alguém vença. Neste caso, o programa irá parar.
